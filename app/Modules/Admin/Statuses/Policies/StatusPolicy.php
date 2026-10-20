@@ -19,7 +19,13 @@ class StatusPolicy
         //
     }
 
-    public function view(User $user){
+    public function view(User $user)
+    {
         return $user->canDo(['SUPER_ADMINISTRATOR', 'STATUSES_ACCESS']);
+    }
+
+    public function manage(User $user): bool
+    {
+        return $user->canDo(['SUPER_ADMINISTRATOR', 'STATUSES_MANAGE']);
     }
 }

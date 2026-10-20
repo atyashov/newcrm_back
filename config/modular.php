@@ -13,6 +13,13 @@ return [
 
     'modules' => [
         'Admin' => [
+            'Stores',
+            'OutlayGroupNames',
+            'Borrowings',
+            'Expenses',
+            'Incomes',
+            'ExpenseGroups',
+            'CashBoxes',
             'Clients',
             'ClientTypes',
             'Dashboard',
@@ -27,11 +34,13 @@ return [
             'Subdivisions',
             'Subjects',
             'User',
+            'Warehouses',
             'File'
         ],
 
         'Pub' => [
             'Auth',
+            'Outlays',
         ],
     ]
 ];

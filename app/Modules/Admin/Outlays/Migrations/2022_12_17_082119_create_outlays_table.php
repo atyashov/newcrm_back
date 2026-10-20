@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('outlays', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title');
-            $table->date('execution_date');
-            $table->date('return date')->nullable();
+            $table->dateTime('execution_date');
+            $table->dateTime('return_date')->nullable();
             $table->text('date_comment')->nullable();
             $table->integer('subdivision_id')->unsigned();
             $table->foreign('subdivision_id')->references('id')->on('subdivisions')->onDelete('cascade');

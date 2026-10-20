@@ -8,26 +8,25 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('outlay_groups', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 255);
-            $table->integer('subdivision_id')->unsigned();
-            $table->foreign('subdivision_id')->references('id')->on('subdivisions')->onDelete('cascade');
+            $table->unsignedInteger('outlay_id')->index();
+            $table->foreign('outlay_id')
+                ->references('id')
+                ->on('outlays')
+                ->cascadeOnDelete();
+            $table->json('data')->nullable();
             $table->timestamps();
         });
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('outlay_groups');
     }

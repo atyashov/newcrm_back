@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Modules\Admin\Role\Models\Permission;
+use Illuminate\Database\Seeder;
 
 class PermissionsSeeder extends Seeder
 {
@@ -14,10 +13,12 @@ class PermissionsSeeder extends Seeder
     public function run(): void
     {
         $permissions = [
+            'SUPER_ADMINISTRATOR' => 'SUPER ADMINISTRATOR',
             'ROLES_ACCESS' => 'Просмотр ролей',
             'ROLES_MANAGE' => 'Управление ролями',
             'USERS_ACCESS' => 'Просмотр пользователей',
             'USERS_MANAGE' => 'Управление пользователями',
+            'USER_MANAGE' => 'Создание и управление пользователями',
             'CLIENTS_ACCESS' => 'Просмотр клиентов',
             'CLIENTS_MANAGE' => 'Управление клиентами',
             'ORDERS_ACCESS' => 'Просмотр заказов',
@@ -35,17 +36,26 @@ class PermissionsSeeder extends Seeder
             'STATUSES_MANAGE' => 'Управление статусами',
             'TASKS_ACCESS' => 'Просмотр задач',
             'TASKS_MANAGE' => 'Управление задачами',
-            'MENU_ACCESS' => "Доступ к меню",
-            'MENU_MANAGE' => "Управление меню",
+            'MENU_ACCESS' => 'Доступ к меню',
+            'MENU_MANAGE' => 'Управление меню',
+            'EXPENSE_GROUP_ACCESS' => 'Доступ к группам расходов',
+            'EXPENSE_GROUP_MANAGE' => 'Управление группой расходов',
+            'EXPENSE_ACCESS' => 'Доступ к расходам',
+            'EXPENSE_MANAGE' => 'Управление расходами',
+            'CAASHBOX_ACCESS' => 'Доступ к кассам',
+            'CASHBOX_MANAGE' => 'Управление кассами',
+            'BORROWING_ACCESS' => 'Доступ к займам',
+            'BORROWING_MANAGE' => 'Управление займами',
+            'WAREHOUSE_ACCESS' => 'Доступ к складу',
+            'WAREHOUSE_MANAGE' => 'Управление складом',
+            'STORE_ACCESS' => 'Просмотр складов хранения',
+            'STORE_MANAGE' => 'Управление складами хранения',
         ];
 
-        Permission::query()->delete();
-
         foreach ($permissions as $permission => $title) {
-            Permission::create([
+            Permission::firstOrCreate([
                 'alias' => $permission,
-                'title' => $title,
-            ]);
+            ], ['title' => $title]);
         }
     }
 }

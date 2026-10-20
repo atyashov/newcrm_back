@@ -25,9 +25,8 @@ class Menu extends Model
                 $arr = collect($user->getMergedPermissions())->map(function($item){
                     return $item['id'];
                 });
-                $q->whereIn('id', $arr->toArray())
-            ->orderBy('sort_order');
-        });
+                $q->whereIn('permissions.id', $arr->toArray());
+        })->orderBy('parent')->orderBy('sort_order')->orderBy('id');
     }
 
     public function scopeMenuByType($query, $type) {

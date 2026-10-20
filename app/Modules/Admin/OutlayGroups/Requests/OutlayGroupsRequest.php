@@ -2,11 +2,14 @@
 
 namespace App\Modules\Admin\OutlayGroups\Requests;
 
+use App\Core\Traits\HasSubdivisionRules;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
 class OutlayGroupsRequest extends FormRequest
 {
+    use HasSubdivisionRules;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -25,8 +28,9 @@ class OutlayGroupsRequest extends FormRequest
     public function rules()
     {
         return [
+            /** @see HasSubdivisionRules */
+            ...$this->requiredSubdivisionRules(),
             'name' => 'required',
-            'subdivision_id' => 'required',
         ];
     }
 }

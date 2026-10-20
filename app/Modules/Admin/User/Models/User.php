@@ -3,6 +3,7 @@
 namespace App\Modules\Admin\User\Models;
 
 use App\Modules\Admin\Role\Models\Traits\UserRoles;
+use App\Core\Traits\HasFilter;
 use App\Modules\Admin\Subdivisions\Models\Subdivision;
 use App\Modules\Admin\Subdivisions\Models\UserSubdivision;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,12 +15,13 @@ use Laravel\Passport\Contracts\OAuthenticatable;
 
 class User extends Authenticatable implements OAuthenticatable
 {
-    use HasFactory, HasApiTokens, UserRoles;
+    use HasFactory, HasApiTokens, UserRoles, HasFilter;
 
     protected $fillable = [
         'firstname',
         'lastname',
         'email',
+        'login',
         'phone',
         'status',
     ];

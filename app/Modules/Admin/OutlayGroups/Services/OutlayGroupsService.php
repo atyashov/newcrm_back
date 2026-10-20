@@ -3,13 +3,17 @@
 namespace App\Modules\Admin\OutlayGroups\Services;
 
 use App\Modules\Admin\OutlayGroups\Models\OutlayGroup;
+use App\Modules\Admin\OutlayGroups\Requests\ListOutlayGroupsRequest;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\Request;
 
 class OutlayGroupsService
 {
-    public function getOutlayGroups(Request $request) : Collection
+    public function getOutlayGroups(ListOutlayGroupsRequest $request) : Collection
     {
-        return OutlayGroup::where('subdivision_id', '=', $request->query('subdivision_id'))->get();
+        return OutlayGroup::query()
+            ->whereHas('outlay', fn ($query) => $query->where('subdivision_id', (int) $request->input('subdivision_id')))
+            ->where('outlay_id', $request->input('outlay_id'))
+            ->with(['groupName', 'items.images'])
+            ->orderBy('position')->orderBy('id')->get();
     }
 }

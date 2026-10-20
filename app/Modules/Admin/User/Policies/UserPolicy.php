@@ -19,15 +19,15 @@ class UserPolicy
         //
     }
     public function view(User $user){
-        return $user->canDo(['SUPER_ADMINISTRATOR', 'USER_ACCESS']);
+        return $user->canDo(['SUPER_ADMINISTRATOR', 'USERS_ACCESS']);
     }
     public function create(User $user){
-        return $user->canDo(['SUPER_ADMINISTRATOR', 'USER_ACCESS']);
+        return $user->canDo(['SUPER_ADMINISTRATOR', 'USER_MANAGE']);
     }
     public function edit(User $user){
-        return $user->canDo(['SUPER_ADMINISTRATOR', 'USER_ACCESS']);
+        return $user->canDo(['SUPER_ADMINISTRATOR', 'USER_MANAGE']);
     }
     public function delete(User $user){
-        return $user->canDo(['SUPER_ADMINISTRATOR', 'USER_ACCESS']);
+        return $user->canDo(['SUPER_ADMINISTRATOR', 'USER_MANAGE']);
     }
 }

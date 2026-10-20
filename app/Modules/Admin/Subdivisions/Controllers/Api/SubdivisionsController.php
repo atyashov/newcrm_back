@@ -4,6 +4,8 @@ namespace App\Modules\Admin\Subdivisions\Controllers\Api;
 
 use App\Modules\Admin\Subdivisions\Models\Subdivision;
 use App\Modules\Admin\Subdivisions\Requests\SubdivisionsRequest;
+use App\Modules\Admin\Subdivisions\Requests\ListSubdivisionsRequest;
+use App\Core\Filters\SubdivisionsFilter;
 use App\Modules\Admin\Subdivisions\Services\SubdivisionsService;
 use App\Services\Response\ResponseService;
 use Illuminate\Http\Request;
@@ -24,12 +26,12 @@ class SubdivisionsController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(ListSubdivisionsRequest $request, SubdivisionsFilter $filter)
     {
         $this->authorize('view', Subdivision::class);
 
         return ResponseService::sendJsonResponse(true, 200, [], [
-            'items' => $this->service->getSubdivisions()
+            'items' => $this->service->getSubdivisions($request, $filter)
         ]);
     }
 
@@ -51,6 +53,7 @@ class SubdivisionsController extends Controller
      */
     public function store(SubdivisionsRequest $request)
     {
+        $this->authorize('manage', Subdivision::class);
         $subdivision = $this->service->save($request, new Subdivision());
 
         return ResponseService::sendJsonResponse(true, 200, [], [
@@ -66,6 +69,8 @@ class SubdivisionsController extends Controller
      */
     public function show(Subdivision $subdivision)
     {
+        $this->authorize('view', $subdivision);
+        abort_unless(request()->user()->hasSubdivisionAccess($subdivision->id), 403);
         return ResponseService::sendJsonResponse(true, 200, [], [
             'item' => $subdivision
         ]);
@@ -91,6 +96,8 @@ class SubdivisionsController extends Controller
      */
     public function update(SubdivisionsRequest $request, Subdivision $subdivision)
     {
+        $this->authorize('manage', $subdivision);
+        abort_unless($request->user()->hasSubdivisionAccess($subdivision->id), 403);
         $subdivision = $this->service->save($request, $subdivision);
 
         return ResponseService::sendJsonResponse(true, 200, [], [
@@ -106,6 +113,8 @@ class SubdivisionsController extends Controller
      */
     public function destroy(Subdivision $subdivision)
     {
+        $this->authorize('delete', $subdivision);
+        abort_unless(request()->user()->hasSubdivisionAccess($subdivision->id), 403);
         $subdivision->delete();
         return ResponseService::sendJsonResponse(true, 200, [], [
             'item' => $subdivision

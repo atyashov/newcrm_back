@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Modules\Admin\Subdivisions\Models\Subdivision;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class SubdivisionsSeeder extends Seeder
@@ -13,7 +12,6 @@ class SubdivisionsSeeder extends Seeder
      */
     public function run(): void
     {
-        Subdivision::query()->delete();
         $subdivisions = [
             [
                 'title' => 'Впрокат',
@@ -71,10 +69,13 @@ class SubdivisionsSeeder extends Seeder
                         Email: <a href="mailto:info@tentmobile.ru">info@tentmobile.ru</a><br>
 </strong>',
                 'site_link' => 'https://tentmobile.ru',
-            ]
+            ],
         ];
         foreach ($subdivisions as $subdivision) {
-            Subdivision::query()->create($subdivision);
+            $exists = Subdivision::query()->whereRaw('LOWER(title) = LOWER(?)', [$subdivision['title']])->exists();
+            if (! $exists) {
+                Subdivision::query()->create($subdivision);
+            }
         }
     }
 }

@@ -14,7 +14,7 @@ class  LoginController extends Controller
     public function login(LoginRequest $request): \Illuminate\Http\JsonResponse
     {
 
-        $credentials = request(['email', 'password']);
+        $credentials = $request->only(['login', 'password']);
 
         if (!Auth::attempt($credentials)){
             return ResponseService::sendJsonResponse(

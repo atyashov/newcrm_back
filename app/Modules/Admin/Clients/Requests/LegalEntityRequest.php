@@ -18,6 +18,7 @@ class LegalEntityRequest extends FormRequest
             'contact_name' => 'required',
             'organization_name' => 'required',
             'client_type_id' => 'required',
+            'ogrn' => ['nullable', 'string', 'regex:/^(?:[0-9]{13}|[0-9]{15})$/D'],
         ];
     }
 

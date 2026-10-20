@@ -3,6 +3,7 @@
 namespace App\Modules\Admin\OutlayGroups\Controllers\Api;
 
 use App\Modules\Admin\OutlayGroups\Models\OutlayGroup;
+use App\Modules\Admin\OutlayGroups\Requests\ListOutlayGroupsRequest;
 use App\Modules\Admin\OutlayGroups\Services\OutlayGroupsService;
 use App\Services\Response\ResponseService;
 use Illuminate\Http\Request;
@@ -24,7 +25,7 @@ class OutlayGroupsController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index(Request $request)
+    public function index(ListOutlayGroupsRequest $request)
     {
         return ResponseService::sendJsonResponse(true, 200, [], [
             'items' => $this->service->getOutlayGroups($request)

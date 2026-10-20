@@ -24,8 +24,8 @@ class LoginRequest extends ApiRequest
     public function rules()
     {
         return [
-            'email' => 'required',
-            'password' => 'required',
+            'login' => ['required', 'string', 'max:90'],
+            'password' => ['required', 'string'],
         ];
     }
 }

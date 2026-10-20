@@ -24,6 +24,7 @@ return new class extends Migration
             $table->boolean('is_service')->default(false);
             $table->string('image')->nullable();
             $table->boolean('status')->default(1);
+            $table->unsignedBigInteger('site_id')->nullable();
             $table->timestamps();
         });
         Schema::create('product_description', function (Blueprint $table) {
@@ -42,7 +43,7 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('products');
         Schema::dropIfExists('product_description');
+        Schema::dropIfExists('products');
     }
 };

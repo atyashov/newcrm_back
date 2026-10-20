@@ -4,6 +4,8 @@ namespace App\Modules\Admin\User\Controllers\Api;
 
 use App\Modules\Admin\User\Models\User;
 use App\Modules\Admin\User\Requests\UserRequest;
+use App\Modules\Admin\User\Requests\ListUsersRequest;
+use App\Core\Filters\UsersFilter;
 use App\Modules\Admin\User\Services\UserService;
 use App\Services\Response\ResponseService;
 use Illuminate\Http\Request;
@@ -21,11 +23,11 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(ListUsersRequest $request, UsersFilter $filter)
     {
         $this->authorize('view', new User());
 
-        $users = $this->service->getUsers();
+        $users = $this->service->listUsers($request, $filter);
         return ResponseService::sendJsonResponse(true, 200, [], [
             'items' => $users->toArray()
         ]);
@@ -64,8 +66,9 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
+        $this->authorize('view', $user);
         return ResponseService::sendJsonResponse(true, 200, [], [
-            'item' => $user->toArray()
+            'item' => $this->service->withDetails($user)->toArray()
         ]);
     }
 
@@ -104,6 +107,7 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        $this->authorize('delete', $user);
         $user->status = '0';
         $user->update();
         return ResponseService::sendJsonResponse(true, 200, [], [

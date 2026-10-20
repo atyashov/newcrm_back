@@ -2,10 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Modules\Admin\Menu\Models\Menu;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Seeder;
 
 class MenusSeeder extends Seeder
 {
@@ -34,7 +32,7 @@ class MenusSeeder extends Seeder
                         'sort_order' => 1,
                     ],
                     'legal_entities' => [
-                        'title' => "Юридические лица",
+                        'title' => 'Юридические лица',
                         'path' => 'legal-entity',
                         'type' => 'admin',
                         'sort_order' => 2,
@@ -97,7 +95,7 @@ class MenusSeeder extends Seeder
                         'type' => 'admin',
                         'sort_order' => 4,
                     ],
-                ]
+                ],
             ],
             'directories' => [
                 'title' => 'Справочники',
@@ -105,9 +103,9 @@ class MenusSeeder extends Seeder
                 'type' => 'admin',
                 'sort_order' => 5,
                 'childs' => [
-                    'storages' => [
+                    'stores' => [
                         'title' => 'Склады',
-                        'path' => 'storages',
+                        'path' => 'stores',
                         'type' => 'admin',
                         'sort_order' => 1,
                     ],
@@ -141,9 +139,9 @@ class MenusSeeder extends Seeder
                         'type' => 'admin',
                         'sort_order' => 6,
                     ],
-                    'consumption-groups' => [
+                    'expense-groups' => [
                         'title' => 'Группы расходов',
-                        'path' => 'consumption-groups',
+                        'path' => 'expense-groups',
                         'type' => 'admin',
                         'sort_order' => 7,
                     ],
@@ -191,6 +189,18 @@ class MenusSeeder extends Seeder
                         'type' => 'admin',
                         'sort_order' => 2,
                     ],
+                    'users' => [
+                        'title' => 'Пользователи',
+                        'path' => 'users',
+                        'type' => 'admin',
+                        'sort_order' => 3,
+                    ],
+                    'subdivisions' => [
+                        'title' => 'Подразделения',
+                        'path' => 'subdivisions',
+                        'type' => 'admin',
+                        'sort_order' => 4,
+                    ],
                 ],
             ],
             'cashes' => [
@@ -225,18 +235,19 @@ class MenusSeeder extends Seeder
             ],
         ];
 
-        Menu::query()->delete();
-        DB::statement('ALTER TABLE `menus` AUTO_INCREMENT = 1;');
-
         foreach ($menus as $menu) {
             $menu['parent'] = 0;
 
             $childs = $menu['childs'] ?? [];
             unset($menu['childs']);
-            $menuModel = Menu::create($menu);
+            $identity = ['type' => $menu['type'], 'path' => $menu['path']];
+            if ($menu['path'] === '#') {
+                $identity['title'] = $menu['title'];
+            }
+            $menuModel = Menu::firstOrCreate($identity, $menu);
             foreach ($childs as $child) {
                 $child['parent'] = $menuModel->id;
-                $childModel = Menu::create($child);
+                Menu::firstOrCreate(['type' => $child['type'], 'path' => $child['path']], $child);
             }
         }
     }

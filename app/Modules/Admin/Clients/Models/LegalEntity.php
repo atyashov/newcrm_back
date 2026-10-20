@@ -23,6 +23,7 @@ class LegalEntity extends Model
         'additional_phone',
         'client_type_id',
         'tin',
+        'ogrn',
         'cpr',
         'bank_name',
         'bik',

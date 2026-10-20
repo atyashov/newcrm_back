@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Modules\Admin\Menu\Models\Menu;
 use App\Modules\Admin\Role\Models\Permission;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class MenuPermissionSeeder extends Seeder
@@ -20,7 +19,7 @@ class MenuPermissionSeeder extends Seeder
 
         $menus = Menu::get()->pluck('id')->toArray();
 
-        $superAdminPerm->menus()->sync($menus);
+        $superAdminPerm->menus()->syncWithoutDetaching($menus);
 
     }
 }
